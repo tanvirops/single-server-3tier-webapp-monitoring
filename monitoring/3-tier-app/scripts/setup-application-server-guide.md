@@ -485,14 +485,19 @@ sudo -u "$ORIGINAL_USER" -H bash -c "pm2 delete bmi-app-exporter" 2>/dev/null ||
 sudo -u "$ORIGINAL_USER" -H bash <<EOF
 export HOME=/home/$ORIGINAL_USER
 export USER=$ORIGINAL_USER
+export NVM_DIR="/home/$ORIGINAL_USER/.nvm"
+[ -s "\$NVM_DIR/nvm.sh" ] && . "\$NVM_DIR/nvm.sh"
+
 cd "$EXPORTER_DIR"
+
 pm2 start "$EXPORTER_DIR/exporter.js" \
-    --name bmi-app-exporter \
-    --cwd "$EXPORTER_DIR" \
-    --error "$EXPORTER_DIR/logs/err.log" \
-    --output "$EXPORTER_DIR/logs/out.log" \
-    --time \
-    --env production
+  --name bmi-app-exporter \
+  --cwd "$EXPORTER_DIR" \
+  --error "$EXPORTER_DIR/logs/err.log" \
+  --output "$EXPORTER_DIR/logs/out.log" \
+  --time \
+  --env production
+
 pm2 save
 EOF
 
